@@ -2,7 +2,7 @@
 const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
-
+require("dotenv").config();
 //import signin routes
 const authRoutes =  require("./routes/auth.js");
 
@@ -44,7 +44,7 @@ app.use("/auth", authRoutes); //base path of /auth
 //    res.status(201).json(animeEntry);
 //}) 
 
-const PORT = 7777
-app.listen(PORT, () => {
+PORT = process.env.PORT || 7778
+app.listen(process.env.PORT, () => {
     console.log(`Server successfully running on port: ${PORT}`)
 })
