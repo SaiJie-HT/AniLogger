@@ -1,9 +1,9 @@
 import {useState} from "react";
 
-function LoginPage({onLoginSuccess}) {
-  const [isLogin, setIsLogin] = useState(true); //default on login page
-  const [user, setUser] = useState(''); //username
-  const [pass, setPass] = useState(''); //password
+function LoginPage({loggedInUser}) {
+  const [isLogin, setIsLogin] = useState(true); //Default page is login page
+  const [email, setEmail] = useState(''); //email
+  const [password, setPassword] = useState(''); //password
   const [message, setMessage] = useState(''); //message regarding login operations
 
   //reuse for loging in and signing up an account
@@ -23,16 +23,22 @@ function LoginPage({onLoginSuccess}) {
         const res = await fetch(`http://localhost:7777/auth${endpoint}`, {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({username: user, password: pass}), //http request can only read strings in javascript notation, so stringify
+            body: JSON.stringify({email: email, password: password}), //http request can only read strings in javascript notation, so stringify
         });
 
         //await for response to come back
         const data = await res.json();
 
-        //send logged in user to app.jsx if user is login and is authenticated (determeined by the ok status code)
+        //console.log(data.token); //testing
+        //console.log(data.user); //testing
+
+        //response status is codes 200-209 and is on login page
         if (res.ok && isLogin) {
-            //return app.jsx the user that logged in
-            onLoginSuccess(data.username);
+            //return access token and user object
+            loggedInUser({
+                token: data.token,
+                user: data.user
+            })
         } else {
             //if condition unmet, set message of response
             setMessage(data.message);
@@ -49,26 +55,26 @@ function LoginPage({onLoginSuccess}) {
         
         {/* onSubmit: runs handleSubmit when form is sumbitted */}
         <form onSubmit = {handleSubmit}>
-        {/*
-          input: enter info into html doc
-          placeholder: temporary text in input box for hinting as to be what should be entered
-          onChange: what to do after input box is changed
-          e.target.value: get value from what was entered into input
-        */}
+
             <input
-                type = "text"
-                placeholder = "Username"
-                onChange = {(e) => setUser(e.target.value)}
-                required
+                type = "email" //email input type
+                placeholder = "Enter Email" //temp text in input box
+                //[e.target.value] gets value from what was entered on input
+                onChange = {(e) => setEmail(e.target.value)} //changes email to entered email after form is submitted
+                required //box must be filled before submission
             />
+
             <input
-                type = "password"
-                placeholder = "Password"
-                onChange = {(e) => setPass(e.target.value)}
-                required
+                type = "password" //password input type
+                placeholder = "Enter Password" //temptext in input box
+                onChange = {(e) => setPassword(e.target.value)} //changes password to entered password after form is submitted
+                required //box must be filled before submission
             />
+
             <button type = "Submit">{isLogin ? "Login" : "Sign Up"}</button>
         </form>
+
+        
 
         {/*Conditional rendering: if there is text in message, then print paragraph of the message. 
             if there is no text: end process.

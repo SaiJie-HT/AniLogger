@@ -1,86 +1,51 @@
-const express = require("express");
-const router = express.Router();
-const bcrypt = require("bcrypt");
+import { Router } from 'express';
+import supabase from '../databases/supabaseAniLog.js';
 
-const pool = require("../databases/userdata.js");
+//create router
+const router = Router();
 
+//POST /auth/signup 
+//signup page
 router.post("/signup", async (req, res) => {
-    const {username, password} = req.body;
+    const { email, password, username } = req.body;
 
-    try{
-        const userCheck = await pool.query("SELECT username FROM users WHERE username = $1", [username]);
-        if (userCheck.rows.length > 0) {
-            return res.status(400).json({message: "Invalid: Username Already Taken"});
-        }
+    //supabase handles email authentication
+    const { data, error } = await supabase.auth.signUp({ email, password });
 
-        const hashedPassword = await bcrypt.hash(password, 10);
-        console.log(hashedPassword);
-
-        await pool.query("INSERT INTO users (username, password) VALUES ($1, $2)", [username, hashedPassword]);
-        res.status(201).json({message: "Signup Successful"});
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({message: "Server error in signup url"});
+    if (error) {
+        //if there is an error, send bad request status code and print error message
+        //prints error message from supabase's signup error message
+        return res.status(400).json({ message: error.message });
     }
+
+    //send created status code and successful message
+    res.status(201).json({ message: "Signup successful: Check your email to confirm." })
 });
 
+//POST /auth/login
 router.post("/login", async (req, res) => {
-    const {username, password} = req.body;
+    const { email, password } = req.body;
 
-    try {
+    //supabase handles checking the password with the hashed version in its database
+    const { data, error } = await supabase.auth.signInWithPassword({email, password});
 
-        const result = await pool.query("SELECT * FROM users WHERE username = $1", [username]);
-        if (result.rows.length === 0) {
-            return res.status(401).json({message: "Invalid credentials"});
-        }
+    //onsole.log(data); //testing
+    console.log(data.user); //testing
 
-        const user = result.rows[0];
-
-        const isMatch = await bcrypt.compare(password, user.password);
-
-        if(!isMatch) {
-            return res.status(401).json({message: "Invalid credentials"});
-        }
-
-        res.status(202).json({message: "Login Successful", username: user.username});
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({message: "Server error in login url"})
+    if (error) {
+        //if error, send unauthorized status code and print error message
+        //prints error message from supabase's login error message
+        return res.status(401).json({ message: error.message });
     }
-})
 
+    res.status(200).json({
+        message: "Login successful",
+        //send back a session token of the logged in user
+        token: data.session.access_token,
+        //an object of user info that supabase has on logged in user
+        user: data.user
+    });
 
+});
 
-//const users = [];
-//
-//router.post("/signup", (req, res) => {
-//    const {username, password} = req.body; //deconstruct signup info from req body
-//
-//    //check if user already exists
-//    if (users.find(u => u.username === username)) {
-//        res.status(406).json({message: "Invalid: Username Already Taken"});
-//    }
-//
-//    users.push({username, password}); //push to credential storage
-//    res.status(200).json({message: "Signup Successful"}); //send ok response and say successful signup.
-//});
-//
-//router.post("/login", (req, res) => {
-//    const {username, password} = req.body;
-//
-//    //finds and returns user that matches credentials. Otherwise undefined
-//    const user = users.find(u => u.username === username && u.password === password);
-//
-//    //unauthorized status code if invalid credentials
-//    if (!user) { 
-//        res.status(401).json({message: "Invalid Credentials!"});
-//    };
-//
-//    //res accepted status code
-//    //also res with username back to frontend
-//    res.status(202).json({message: "Login Successful", username: user.username});
-//});
-
-module.exports = router;
+export default router;
