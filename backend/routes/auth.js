@@ -7,7 +7,7 @@ const router = Router();
 //POST /auth/signup 
 //signup page
 router.post("/signup", async (req, res) => {
-    const { email, password, username } = req.body;
+    const { email, password } = req.body;
 
     //supabase handles email authentication
     const { data, error } = await supabase.auth.signUp({ email, password });

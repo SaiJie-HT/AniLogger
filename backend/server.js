@@ -8,6 +8,7 @@ dotenv.config();
 
 //import Authetication routes
 import authRoutes from './routes/auth.js';
+import aniListRoutes from './routes/aniList.js'
 
 const app = express();
 
@@ -22,8 +23,10 @@ app.use(express.urlencoded({extended: true})) //read in urlencoded strings
 
 //Use routes
 //  /auth/ routes
-app.use("/auth", authRoutes); //Login and Signup
+app.use("/auth", authRoutes); //Login and Signup Routes
 
+// /listdata/ routes
+app.use("/listdata", aniListRoutes) //anime list routes for fetching data
 
 
 
