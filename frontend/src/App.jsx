@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import './App.css'
-import LoginPage from "./pages/loginPage.jsx"
+import LoginPage from './pages/loginPage.jsx';
+import MenuPage from './pages/MenuPage.jsx';
+import AnimeListPage from './pages/AnimeListPage.jsx'
 
 
 function App() {
@@ -11,20 +13,16 @@ function App() {
     
     return (
       <>
-      <LoginPage loggedInUser={setUserTokenAndData} /> 
+        <LoginPage loggedInUser={setUserTokenAndData} /> 
       </>
-
     );
   }
 
   return (
     <>
-      <div>
-        <h1>Welcome, {userTokenAndData.user.email}!</h1>
-
-        {/*log out button */}
-        <button onClick={() => setUserTokenAndData(null)}>Log Out</button>
-      </div>
+      <MenuPage userData = {userTokenAndData.user} setUserStatus = {setUserTokenAndData}>
+        <AnimeListPage token = {userTokenAndData.token}/>
+      </MenuPage>
     </>
   )
 }

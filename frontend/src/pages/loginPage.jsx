@@ -29,8 +29,8 @@ function LoginPage({loggedInUser}) {
         //await for response to come back
         const data = await res.json();
 
-        console.log(data.token); //testing
-        console.log(data.user); //testing
+        //console.log(data.token); //testing
+        //console.log(data.user); //testing
 
         //response status is codes 200-209 and is on login page
         if (res.ok && isLogin) {

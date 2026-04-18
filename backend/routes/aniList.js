@@ -7,53 +7,86 @@ const router = Router();
 
 // POST: /listdata/animelist 
 // create new anime entry in the database for the user
-router.post("/animelist", requireAuth, async (req, res) => {
+router.post("/animelist/:animeId", requireAuth, async (req, res) => {
+    const { animeId } = req.params
     const { animeInfo } = req.body;
     const userId = req.user.id; //user is in request after requrieAuth middleware runs
 
     //deconstruct anime entry information
-    const {animeId, watchStatus, rating, seasonsWatched, watchStartDate, watchEndDate, derivativeInterests, comments} = animeInfo;
+    const { watchStatus, rating, seasonsWatched, watchStartDate, watchEndDate, derivativeInterests, comments} = animeInfo;
 
     //insert new anime entry information
-    //supabase handles auto incrementing entryId after inserting new data
-    //updates Entry table
-    const { data: entryData, error: entryError } = await supabase
-        .from("Entry")
+    //creates a new entry in the UserAnimeList Table
+    const { error: listError } = await supabase
+        .from("UserAnimeList")
         .insert({
+            animeId,
             userId: userId,
             watchStatus,
             rating,
             seasonsWatched,
-            watchStartDate: watchStartDate || "null",
-            watchEndDate: watchEndDate || "null",
+            watchStartDate: watchStartDate || null,
+            watchEndDate: watchEndDate || null,
             derivativeInterests,
-            comments: comments || "null",
+            comments: comments || null,
         })
-        .select() //returns the inserted row
-        .single(); //return to entryData the selected single row
 
-    if (entryError) return res.status(500).json({ message: entryError.message });
 
-    //update contains table
-    const { error: containsError } = await supabase
-        .from("contains")
-        .insert({
-            animeId: animeId,
-            entryId: entryData.entryId //insert entryId returned from previous insert function
-        });
+    if (listError) return res.status(500).json({ message: listError.message }); //500 Internal Server Error
 
-    if (containsError) return res.status(304).json({ message: containsError.message });
-
-    res.status(201).json({ message: "Anime added successfully" })
+    res.status(201).json({ message: "Anime entry added successfully" }); //201 Created
 });
 
+router.get("/animelist", requireAuth, async (req, res) => {
+    const userId = req.user.id;
+    const { data, error } = await supabase
+        .from("UserAnimeList")
+        .select("*, Anime(animeName)") //select from all columns of UserAnimeList and animeName from Anime
+        .eq("userId", userId);
 
-router.get("alimelist", requireAuth, async (req, res) => {
+    if (error) return res.status(500).json({ message: error.message }); //500 Internal Server Error
+
+    return res.status(200).json({ message: "Here is your anime list", data: data }) //returns the array of anime entrys of the user
+});
+
+router.put("/animelist/:animeId", requireAuth, async (req, res) => {
+    const { animeId } = req.params;
+    const { toUpdateInEntry } = req.body;
+    const userId = req.user.id;
+
+    //checks if toUpdateEntry Json is undefined or if there is nothing to update
+    //Object.keys() returns array of all the keys in the Json object of toUpdateInEntry
+    if (!toUpdateInEntry || Object.keys(toUpdateInEntry).length === 0) {
+        return res.status(400).json({ message: "No fields to update" }); //400 Bad Request
+    }
+
+    const { error } = await supabase
+                            .from("UserAnimeList")
+                            .update(toUpdateInEntry) //updates all fields of Json obj that matches | undefined are not updated
+                            .eq("userId", userId)
+                            .eq("animeId", animeId);
+    if (error) return res.status(500).json({ message: error.message }); //500 Internal Server Error
+
+    return res.status(200).json({ message: "Anime entry updated"}); //200 Ok
+
+});
+
+router.delete("/animelist/:animeId", requireAuth, async (req, res) => {
+    const { animeId } = req.params;
     const userId = req.user.id;
 
     const { data, error } = await supabase
-        .from("Entry")
-        .select("*")
-        .eq("userId", userId)
+                                    .from("UserAnimeList")
+                                    .delete()
+                                    .eq("userId", userId)
+                                    .eq("animeId", animeId)
+                                    .select();
 
+    if (error) return res.status(500).json({ message: error.message }); //500 Internal Server Error
+
+    //data data is an array of Json.
+    //since one entry is deleted, there is one element in array. Thus, get the element at index 0
+    return res.status(200).json({ message: "Anime entry deleted", deletedEntry: data[0]}); //200 Ok
 });
+
+export default router;
