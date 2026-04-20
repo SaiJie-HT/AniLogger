@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 //userData is the user object from auth
 function MenuPage({userData, setUserStatus, children}) {
 

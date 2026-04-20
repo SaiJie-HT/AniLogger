@@ -30,7 +30,7 @@ router.post("/login", async (req, res) => {
     const { data, error } = await supabase.auth.signInWithPassword({email, password});
 
     //onsole.log(data); //testing
-    console.log(data.user); //testing
+    //console.log(data.user); //testing
 
     if (error) {
         //if error, send unauthorized status code and print error message

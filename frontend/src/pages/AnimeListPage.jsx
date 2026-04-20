@@ -11,7 +11,7 @@ function AnimeListPage({token}) {
         const fetchAnimeList = async () => {
             try {
                 //http GET request
-                const fetchRes = await fetch(`http://localhost:7777/listdata/animelist` , {
+                const fetchRes = await fetch(`http://localhost:7777/anime_list/get_list` , {
                     method: "GET",
                     headers: { 
                         "Content-Type" : "application/json",
@@ -85,60 +85,4 @@ function AnimeListPage({token}) {
 
 export default AnimeListPage;
 
-/*
-
-function AnimeListPage(token) {
-    let animeListMessage = "Retreiving Anime List";
-    let animeListToDisplay = [];
-
-    try {
-    const fetchRes = await fetch(`http://localhost:7777/animelist` , {
-        method: "GET",
-        headers: { 
-            "Content-Type" : "application/json",
-            "Authorization" : `Bearer ${token}`
-        },
-    });
-
-    const listData = await fetchRes.json();
-
-    if (!listDataRes.ok) {
-        console.log("Error:", listData.message);
-        throw new Error(listData.message);
-    } 
-
-    const aniListArr = listData.data;
-
-    for (const record of aniListArr) {
-        animeListToDisplay.push(
-            <> 
-                <tr>
-                    <td>{record.animeName}</td>
-                    <td>{record.watchStatus}</td>
-                    <td>{record.rating}</td>
-                    <td>{record.seasonsWatched}</td>
-                    <td>{record.watchStartDate === null ? "Unknown Start Date" : record.watchStartDate}</td>
-                    <td>{record.watchEndDate === null ? "Unknown End Date" : record.watchEndDate}</td>
-                    <td>{record.derivativeInteresets ? "Yes" : "No"}</td>
-                    <td>{record.comments === null ? "No Comments" : record.comments}</td>
-                </tr>
-            </>
-        );
-    }
-
-
-    } catch (error) {
-        console.error("Error fetching data:", error);
-    }
-
-
-    return (
-        <>
-
-        </>
-    )
-}
-
-
- */
 

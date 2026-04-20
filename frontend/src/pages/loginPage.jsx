@@ -50,6 +50,8 @@ function LoginPage({loggedInUser}) {
   
   return (
     <div>
+        
+        <p>Testing Email: bekobaj366@pmdeal.com</p>
 
         <h2>{isLogin ? "login" : "Signup"}</h2>
         
