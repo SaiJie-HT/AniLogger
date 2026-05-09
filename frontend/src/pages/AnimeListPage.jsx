@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 
-function AnimeListPage({token}) {
+
+function AnimeListPage({ token, toggleUpdate, handleUpdatePress, refreshTrigger, triggerRefresh }) {
     const [animeList, setAnimeList] = useState([]);
     const [error, setError] = useState(null);
-
+ 
     //selective re-rendering of state
     useEffect(() => {
 
@@ -11,11 +12,12 @@ function AnimeListPage({token}) {
         const fetchAnimeList = async () => {
             try {
                 //http GET request
-                const fetchRes = await fetch(`http://localhost:7777/anime_list/get_list` , {
+                const fetchRes = await fetch(`http://localhost:7777/anime_list/get_list`, {
                     method: "GET",
-                    headers: { 
-                        "Content-Type" : "application/json",
-                        "Authorization" : `Bearer ${token}`
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${token}`
+
                     }
                 });
 
@@ -26,7 +28,7 @@ function AnimeListPage({token}) {
                 if (!fetchRes.ok) {
                     console.log(listData.message);
                     throw new Error(listData.message);
-                } 
+                }
 
                 //save the array of records of anime entries to animeList 
                 setAnimeList(listData.data);
@@ -40,7 +42,35 @@ function AnimeListPage({token}) {
         //run for the first time and every time token updates
         fetchAnimeList();
 
-    }, [token]); //only re-render state when token is changed or first put in
+    }, [token, refreshTrigger]); //only re-render state when token is changed or refresh is triggered
+
+    const removeFromEntry = async (idToDelete) => {
+        try {
+            const deleteRes = await fetch(`http://localhost:7777/anime_list/delete_entry/${idToDelete}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            const data = await deleteRes.json();
+
+            console.log(data.deletedEntry);
+            if (triggerRefresh) triggerRefresh();
+
+            if (!deleteRes.ok) {
+                console.log(deleteRes.message);
+                throw new Error(deleteRes.message);
+            }
+
+        } catch (error) {
+            console.error("Error removing entry:", error);
+            setError(error.message);
+        }
+
+    }
+
 
     return (
         <>
@@ -56,6 +86,7 @@ function AnimeListPage({token}) {
                         <th> Watch End Date </th>
                         <th> Interests In Other Adaptations? </th>
                         <th> Comments </th>
+                        <th> Entry Actions </th>
                     </tr>
                 </thead>
 
@@ -65,7 +96,7 @@ function AnimeListPage({token}) {
                     {/** JXS is able to handle an array of fragments returned by map() */}
                     {animeList.map((record) => (
                         //key so react can keep track of list efficiently
-                        <tr key = {record.animeId}>
+                        <tr key={record.animeId}>
                             <td>{record.Anime.animeName}</td>
                             <td>{record.watchStatus}</td>
                             <td>{record.rating}</td>
@@ -74,7 +105,16 @@ function AnimeListPage({token}) {
                             <td>{record.watchEndDate === null ? "Unknown End Date" : record.watchEndDate}</td>
                             <td>{record.derivativeInterests ? "Yes" : "No"}</td>
                             <td>{record.comments === null ? "No Comments" : record.comments}</td>
-                        </tr> 
+                            <td>
+                                {/*to Modify anime entry and refresh the page */}
+                                <button onClick={() => { 
+                                    toggleUpdate(true); 
+                                    handleUpdatePress(record); 
+                                    }}>Edit</button>
+                                {/*to remove anime entry and refresh the page */}
+                                <button onClick={() => removeFromEntry(record.animeId)}>Delete</button>
+                            </td>
+                        </tr>
                     ))}
 
                 </tbody>
@@ -84,5 +124,3 @@ function AnimeListPage({token}) {
 }
 
 export default AnimeListPage;
-
-

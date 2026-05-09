@@ -10,7 +10,13 @@ router.post("/signup", async (req, res) => {
     const { email, password } = req.body;
 
     //supabase handles email authentication
-    const { data, error } = await supabase.auth.signUp({ email, password });
+    const { data, error } = await supabase.auth.signUp({ 
+        email, 
+        password,
+        options: {
+            redirectTo: 'http://localhost:5173/'
+        }
+    });
 
     if (error) {
         //if there is an error, send bad request status code and print error message

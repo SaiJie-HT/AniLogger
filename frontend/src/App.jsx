@@ -7,8 +7,7 @@ import AnimeListPage from './pages/AnimeListPage.jsx'
 import ListFunctionButtons from './pages/ListFunctionButtons.jsx';
 import NewEntryPage from './pages/listFunctionPages/NewEntryPage.jsx';
 import NewAnimePage from './pages/listFunctionPages/NewAnimePage.jsx';
-
-
+import ModifyAnimePage from './pages/ModifyAnimePage.jsx';
 
 function App() {
   
@@ -28,13 +27,19 @@ function App() {
 
   const [newEntry, toggleNewEntry] = useState(false);
   const [newAnime, toggleNewAnime] = useState(false);
+  const [modifyAnime, toggleModifyAnime] = useState(false);
+  const [animeInfoEdit, setAnimeInfoToModify] = useState(null);
 
+  //states for refreshing modifications and deletions of anime entry
+  const [refreshTrigger, setRefreshTrigger] = useState(false);
+  const triggerRefresh = () => setRefreshTrigger(prev => !prev);
+
+  //new pages for creating new entries & adding anime to global list
   if (newEntry) return <NewEntryPage token = {userTokenAndData.token} toggleNewEntryOff = {toggleNewEntry}/>
   if (newAnime) return <NewAnimePage token = {userTokenAndData.token} toggleNewAnimeOff = {toggleNewAnime}/> 
 
     //displaying login and signin pages 
   if (!userTokenAndData) return <LoginPage loggedInUser={setUserTokenAndData} /> 
-
 
   return (
     <>
@@ -43,8 +48,21 @@ function App() {
         <h2>Functions Bar:</h2>
         <ListFunctionButtons toggleNewEntryOn = {toggleNewEntry} toggleNewAnimeOn = {toggleNewAnime} />
 
+        {modifyAnime && <ModifyAnimePage 
+          token = {userTokenAndData.token} 
+          editToggle = {toggleModifyAnime} 
+          editInfo = {animeInfoEdit}
+          triggerRefresh = {triggerRefresh} /> }
+
         <h3>{userTokenAndData.user.email}'s Anime Catalouge</h3>
-        <AnimeListPage token = {userTokenAndData.token}/>
+        <AnimeListPage 
+          token = {userTokenAndData.token} 
+          toggleUpdate = {toggleModifyAnime} 
+          handleUpdatePress = {setAnimeInfoToModify}
+          refreshTrigger = {refreshTrigger} 
+          triggerRefresh = {triggerRefresh}  
+        />
+
       </MenuPage>
     </>
   )

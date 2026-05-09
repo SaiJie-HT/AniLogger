@@ -118,6 +118,9 @@ router.delete("/delete_entry/:animeId", requireAuth, async (req, res) => {
     const { animeId } = req.params;
     const userId = req.user.id;
 
+    console.log(animeId, typeof animeId)
+    console.log(userId, typeof userId);
+
     const { data, error } = await supabase
                                    .from("UserAnimeList")
                                    .delete()
