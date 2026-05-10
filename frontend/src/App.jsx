@@ -46,7 +46,7 @@ function App() {
 
         <h2>Functions Bar:</h2>
         <ListFunctionButtons toggleNewEntryOn = {toggleNewEntry} toggleNewAnimeOn = {toggleNewAnime} />
-
+        <hr />
         {modifyAnime && <ModifyAnimePage 
           token = {userTokenAndData.token} 
           editToggle = {toggleModifyAnime} 

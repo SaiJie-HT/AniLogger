@@ -55,7 +55,7 @@ export default function ModifyAnimePage({ token, editToggle, editInfo, triggerRe
 
             {/* go back to home page*/}
             <button onClick={() => editToggle(false)}> Close Modify Menu </button>
-
+            <hr />
         </>
     )
 }

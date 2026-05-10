@@ -39,22 +39,22 @@ export default function GlobalAnimeReferencePage({ token }) {
             {error && <p style={{ color: "red" }}>{error}</p>}
 
             {/* display global anime data to reference for anime id for the new entry form */}
-            <table>
+            <table class = "reference_table">
                 <thead>
                     <tr>
                         {/* Widden the title column to cover two columns  */}
-                        <th colSpan={2}> Available Anime Reference (Alphabetical Order)</th>
+                        <th colspan = "2"> Available Anime Reference (Alphabetical Order)</th>
                     </tr>
                     <tr>
                         <th> Anime Name </th>
-                        <th> Anime Reference ID </th>
+                        <th class = "ref_id"> Anime Reference ID </th>
                     </tr>
                 </thead>
                 <tbody>
                     {animeNamesList.map((record) => (
                         <tr key={record.animeId}>
                             <td>{record.animeName}</td>
-                            <td>{record.animeId}</td>
+                            <td class = "ref_id">{record.animeId}</td>
                         </tr>
                     ))}
                 </tbody>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import GlobalAnimeReferencePage from './InnerPages/GlobalAnimeReferencePage.jsx';
 import AnimeForm from '../AnimeForm.jsx';
+import AniLoggerHeaderElement from '../AniLoggerHeaderElement.jsx';
 
 export default function NewEntryPage({ token, toggleNewEntryOff }) {
     const [error, setError] = useState(null);
@@ -35,7 +36,9 @@ export default function NewEntryPage({ token, toggleNewEntryOff }) {
     };
 
     return (
-        <>  {/* form for creating a new anime entry */}
+        <>  
+            <AniLoggerHeaderElement />
+            {/* form for creating a new anime entry */}
             <AnimeForm submissionFunction = {handleSubmit} formTitle = "Create New Anime Entry" />
             {/* print error message if entry submission is invalid */}
             {error && <p style={{ color: "red" }}>{error}</p>}

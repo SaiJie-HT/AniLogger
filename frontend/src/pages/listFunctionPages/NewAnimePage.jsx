@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import GlobalAnimeReferencePage from "./InnerPages/GlobalAnimeReferencePage.jsx"
+import AniLoggerHeaderElement from '../AniLoggerHeaderElement.jsx';
 
 export default function NewAnimePage({ token, toggleNewAnimeOff }) {
     const [error, setError] = useState(null);
@@ -35,17 +36,20 @@ export default function NewAnimePage({ token, toggleNewAnimeOff }) {
 
     return (
         <>
-            <header>Add New Global Anime</header>
-            <form onSubmit={handleSubmit}>
-                <label>
+            <AniLoggerHeaderElement />
+            <form class="anime_form" onSubmit={handleSubmit}>
+                <header>Add New Global Anime</header>
+
+                <div class="ani_form_divider">
                     Anime Name:
-                    <input
+                    <input 
+                        class = "global_name_input"
                         type="text"
                         placeholder="name"
                         onChange={(e) => setNameOfAnime(e.target.value)}
                         required
                     />
-                </label>
+                </div>
                 <button type="submit">Submit</button>
             </form>
 

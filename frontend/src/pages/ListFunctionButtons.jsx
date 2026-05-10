@@ -9,8 +9,8 @@ function ListFunctionButtons({toggleNewEntryOn, toggleNewAnimeOn, children}) {
     return (
         <>
             <div>
-                <button onClick = {() => toggleNewEntryOn(true)}>Create New Entry</button>
-                <button onClick = {() => toggleNewAnimeOn(true)}>Add New Anime To Database</button>
+                <button class = "function_button" onClick = {() => toggleNewEntryOn(true)}>Create New Entry</button>
+                <button class = "function_button" onClick = {() => toggleNewAnimeOn(true)}>Add New Anime To Database</button>
                 {children}
             </div>
 

@@ -1,4 +1,5 @@
 import {useState} from "react";
+import AniLoggerHeaderElement from "./AniLoggerHeaderElement";
 
 function LoginPage({loggedInUser}) {
   const [isLogin, setIsLogin] = useState(true); //Default page is login page
@@ -50,8 +51,8 @@ function LoginPage({loggedInUser}) {
   
   return (
     <div>
-        
-        {/*<p>Testing Email: bekobaj366@pmdeal.com</p>*/}
+        <AniLoggerHeaderElement />
+
 
         <h2 class = "login-header">{isLogin ? "Login:" : "Register:"}</h2>
         

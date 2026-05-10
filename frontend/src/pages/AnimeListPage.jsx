@@ -96,7 +96,7 @@ function AnimeListPage({ token, toggleUpdate, handleUpdatePress, refreshTrigger,
                     {/** JXS is able to handle an array of fragments returned by map() */}
                     {animeList.map((record) => (
                         //key so react can keep track of list efficiently
-                        <tr key={record.animeId}>
+                        <tr class = "entry_data" key={record.animeId}>
                             <td>{record.Anime.animeName}</td>
                             <td>{record.watchStatus}</td>
                             <td>{record.rating}</td>
