@@ -78,7 +78,7 @@ function AnimeListPage({ token, toggleUpdate, handleUpdatePress, refreshTrigger,
                 {/* Head of the table */}
                 <thead>
                     <tr>
-                        <th> Anime Name </th>
+                        <th class ="entry-name"> Anime Name </th>
                         <th> Watch Status </th>
                         <th> Rating </th>
                         <th> Seasons Watched </th>
@@ -86,7 +86,7 @@ function AnimeListPage({ token, toggleUpdate, handleUpdatePress, refreshTrigger,
                         <th> Watch End Date </th>
                         <th> Interests In Other Adaptations? </th>
                         <th> Comments </th>
-                        <th> Entry Actions </th>
+                        <th class ="entry-actions"> Entry Actions </th>
                     </tr>
                 </thead>
 
@@ -105,14 +105,14 @@ function AnimeListPage({ token, toggleUpdate, handleUpdatePress, refreshTrigger,
                             <td>{record.watchEndDate === null ? "Unknown End Date" : record.watchEndDate}</td>
                             <td>{record.derivativeInterests ? "Yes" : "No"}</td>
                             <td>{record.comments === null ? "No Comments" : record.comments}</td>
-                            <td>
+                            <td class = "entry-actions">
                                 {/*to Modify anime entry and refresh the page */}
-                                <button onClick={() => { 
+                                <button class = "update-button" onClick={() => { 
                                     toggleUpdate(true); 
                                     handleUpdatePress(record); 
                                     }}>Edit</button>
                                 {/*to remove anime entry and refresh the page */}
-                                <button onClick={() => removeFromEntry(record.animeId)}>Delete</button>
+                                <button class = "delete-button" onClick={() => removeFromEntry(record.animeId)}>Delete</button>
                             </td>
                         </tr>
                     ))}

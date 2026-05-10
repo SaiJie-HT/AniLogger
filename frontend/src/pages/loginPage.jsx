@@ -51,14 +51,16 @@ function LoginPage({loggedInUser}) {
   return (
     <div>
         
-        <p>Testing Email: bekobaj366@pmdeal.com</p>
+        {/*<p>Testing Email: bekobaj366@pmdeal.com</p>*/}
 
-        <h2>{isLogin ? "login" : "Signup"}</h2>
+        <h2 class = "login-header">{isLogin ? "Login:" : "Register:"}</h2>
         
         {/* onSubmit: runs handleSubmit when form is sumbitted */}
-        <form onSubmit = {handleSubmit}>
-
-            <input
+        <form class = "login-form" onSubmit = {handleSubmit}>
+            
+            Email:
+            <input 
+                class = "login-input"
                 type = "email" //email input type
                 placeholder = "Enter Email" //temp text in input box
                 //[e.target.value] gets value from what was entered on input
@@ -66,14 +68,16 @@ function LoginPage({loggedInUser}) {
                 required //box must be filled before submission
             />
 
+            Password:
             <input
+                class = "login-input"
                 type = "password" //password input type
                 placeholder = "Enter Password" //temptext in input box
                 onChange = {(e) => setPassword(e.target.value)} //changes password to entered password after form is submitted
                 required //box must be filled before submission
             />
 
-            <button type = "Submit">{isLogin ? "Login" : "Sign Up"}</button>
+            <button class = "login-button" type = "Submit">{isLogin ? "Login" : "Sign Up"}</button>
         </form>
 
         
@@ -85,7 +89,7 @@ function LoginPage({loggedInUser}) {
         {message && <p>{message}</p>}
 
         {/* Button to toggle between signing up and loging in */}
-        <button onClick = {() => setIsLogin(!isLogin)}> 
+        <button class = "login-switch-button"onClick = {() => setIsLogin(!isLogin)}> 
             {isLogin ? "Need an account? Sign up" : "Already have an account? Login"}
         </button>
 

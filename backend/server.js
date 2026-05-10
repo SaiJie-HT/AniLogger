@@ -32,9 +32,6 @@ app.use("/anime_list", aniListRoutes); //routes that mainly deal with UserAnimeL
 // /global_list/ routes
 app.use("/global_list", globalListRoutes); //routes that mainly deal with Anime Table
 
-
-
-
 app.listen(PORT, () => {
     console.log(`Server successfully running on PORT: ${PORT}`);
 });

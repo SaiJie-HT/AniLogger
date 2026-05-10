@@ -13,8 +13,6 @@ function ListFunctionButtons({toggleNewEntryOn, toggleNewAnimeOn, children}) {
                 <button onClick = {() => toggleNewAnimeOn(true)}>Add New Anime To Database</button>
                 {children}
             </div>
-            
-            {/* These will now render inline, keeping the user on the same page! */}
 
         </>
     )

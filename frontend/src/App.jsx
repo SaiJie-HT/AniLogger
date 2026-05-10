@@ -1,5 +1,4 @@
 import { useState } from 'react'
-//import './App.css'
 import LoginPage from './pages/loginPage.jsx';
 import MenuPage from './pages/MenuPage.jsx';
 import AnimeListOptionsBar from './pages/ListFunctionButtons.jsx'
@@ -42,7 +41,7 @@ function App() {
   if (!userTokenAndData) return <LoginPage loggedInUser={setUserTokenAndData} /> 
 
   return (
-    <>
+    <div class = "whole">
       <MenuPage userData = {userTokenAndData.user} setUserStatus = {setUserTokenAndData}>
 
         <h2>Functions Bar:</h2>
@@ -64,7 +63,7 @@ function App() {
         />
 
       </MenuPage>
-    </>
+    </div>
   )
 }
 
