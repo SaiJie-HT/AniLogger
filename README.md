@@ -1,5 +1,11 @@
 # Information:
 - git repo: https://github.com/SaiJie-HT/AniLogger#
+- HT's AniLogger:
+    Name: AniLogger
+    Type: Website
+    Description: A website. Users catalogue anime on an interactive database. cataloguing watch status, rating, comments, watch date, seasons watched, along with interests in other derivatives (manga, lightnovels)
+    Main features: User Login, Anime data entry, editing, and removal, styled & interactive frontend
+    Tech Stack: Node.js, Express.js, React + Vite, Supabase + Postgres.
 
 # How to run AniLogger:
 
